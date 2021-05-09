@@ -5,13 +5,17 @@ const client = new Discord.Client()
 client.commands = new Discord.Collection();
 const fs = require('fs');
 const AsciiTable = require('ascii-table')
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 var table = new AsciiTable('Commands')
 
-for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	client.commands.set(command.name, command);
-  table.addRow(defualtPrefix + command.name, 'Loaded!')
+const commandFolders = fs.readdirSync('./commands');
+
+for (const folder of commandFolders) {
+	const commandFiles = fs.readdirSync(`./commands/${folder}`).filter(file => file.endsWith('.js'));
+	for (const file of commandFiles) {
+		const command = require(`./commands/${folder}/${file}`);
+		client.commands.set(command.name, command);
+    table.addRow(defualtPrefix + command.name, 'Loaded!')
+	}
 }
 console.log(table.toString())
 

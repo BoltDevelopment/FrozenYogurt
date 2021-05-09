@@ -2,6 +2,7 @@ const { MessageEmbed } = require('discord.js')
 module.exports = {
 	name: 'ping',
 	description: 'Sends the bot ping.',
+  category: 'general',
 	execute(c, m, a) {
 		var msg = m.channel.send(`🏓 | Pinging...`)
     const embed = new MessageEmbed()

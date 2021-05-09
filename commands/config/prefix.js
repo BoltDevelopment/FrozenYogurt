@@ -3,6 +3,7 @@ const db = require('quick.db')
 module.exports = {
 	name: 'prefix',
 	description: 'Edits the bot prefix!',
+  category: 'config',
 	execute(c, m, a) {
     let prefix = db.get(`prefix_${m.guild.id}`)
     if(!a.length) {

@@ -3,9 +3,12 @@ const db = require('quick.db')
 module.exports = {
 	name: 'help',
 	description: 'Sends info about the bot.',
+  category: 'general',
 	execute(c, m, a) {
+    console.log('hi')
     var prefix = db.get(`prefix_${m.guild.id}`)
     if(prefix == null) prefix = '&'
+    if(!a.length) {
 		const pagination =  require('discord.js-pagination');
 
 const page1 = new MessageEmbed()
@@ -36,6 +39,15 @@ const emojiList = ['⏮', '⏭']
 const timeout = 120000;
 //console.log(c.commands.array())
 pagination(m, pages, emojiList, timeout);
-
+    } else {
+      let cmd = c.commands.get(a[0])
+      const cmdNoExist = new MessageEmbed()
+      cmdNoExist.setThumbnail(c.user.displayAvatarURL())
+      cmdNoExist.setTitle(`Command Does Not Exist`)
+      cmdNoExist.setDescription()
+      cmdNoExist.setFooter(m.author.tag, m.author.displayAvatarURL({ dynamic: true }))
+      cmdNoExist.setTimestamp()
+      if(cmd == null) return m.channel.send(cmdNoExist)
+    }
 	},
 };

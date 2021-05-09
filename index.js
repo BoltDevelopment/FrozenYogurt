@@ -7,7 +7,7 @@ const fs = require('fs');
 const AsciiTable = require('ascii-table')
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 var table = new AsciiTable('Commands')
-w
+
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);

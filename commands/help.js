@@ -15,12 +15,15 @@ page1.setThumbnail(c.user.displayAvatarURL())
 page1.setFooter(m.author.tag, m.author.displayAvatarURL({ dynamic: true }))
 page1.setTimestamp()
 //page1.setColor(roleColor);
-
+const cmdArray = c.commands.array()
+const commands = cmdArray.map(obj => {
+	return ` \`${prefix}${obj.name}\` | ${obj.description}` 
+});
 const embed2 = new MessageEmbed()
 .setAuthor(c.user.tag, c.user.displayAvatarURL())
 .setThumbnail(c.user.displayAvatarURL())
-.setTitle('All Commands.')
-.addFields('NOT DONE')
+.setTitle('Command List')
+.setDescription(commands.join('\n'))
 .setTimestamp()
 //.setColor(roleColor)
 
@@ -31,7 +34,7 @@ const pages = [
 
 const emojiList = ['⏮', '⏭']
 const timeout = 120000;
-
+//console.log(c.commands.array())
 pagination(m, pages, emojiList, timeout);
 
 	},

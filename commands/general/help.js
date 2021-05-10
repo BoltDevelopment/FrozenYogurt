@@ -5,9 +5,9 @@ module.exports = {
 	description: 'Sends info about the bot.',
   category: 'general',
 	execute(c, m, a) {
-    console.log('hi')
     var prefix = db.get(`prefix_${m.guild.id}`)
     if(prefix == null) prefix = '&'
+    console.log(a)
     if(!a.length) {
 		const pagination =  require('discord.js-pagination');
 
@@ -19,20 +19,33 @@ page1.setFooter(m.author.tag, m.author.displayAvatarURL({ dynamic: true }))
 page1.setTimestamp()
 //page1.setColor(roleColor);
 const cmdArray = c.commands.array()
-const commands = cmdArray.map(obj => {
-	return ` \`${prefix}${obj.name}\` | ${obj.description}` 
+const configCmds = cmdArray.map(obj => {
+  if(obj.category == 'config') {
+	return ` \`${prefix}${obj.name}\` | ${obj.description}`
+  }
 });
-const embed2 = new MessageEmbed()
+const generalCmds = cmdArray.map(obj => {
+  if(obj.category == 'general') {
+	return ` \`${prefix}${obj.name}\` | ${obj.description}`
+  }
+});
+const cmdPage1 = new MessageEmbed()
 .setAuthor(c.user.tag, c.user.displayAvatarURL())
 .setThumbnail(c.user.displayAvatarURL())
-.setTitle('Command List')
-.setDescription(commands.join('\n'))
+.setTitle('General Commands')
+.setDescription(generalCmds.join('\n'))
 .setTimestamp()
-//.setColor(roleColor)
+const cmdPage2 = new MessageEmbed()
+.setAuthor(c.user.tag, c.user.displayAvatarURL())
+.setThumbnail(c.user.displayAvatarURL())
+.setTitle('Config Commands')
+.setDescription(configCmds.join('\n'))
+.setTimestamp()
 
 const pages = [
     page1,
-    embed2
+    cmdPage1,
+    cmdPage2
 ];
 
 const emojiList = ['⏮', '⏭']
@@ -44,10 +57,18 @@ pagination(m, pages, emojiList, timeout);
       const cmdNoExist = new MessageEmbed()
       cmdNoExist.setThumbnail(c.user.displayAvatarURL())
       cmdNoExist.setTitle(`Command Does Not Exist`)
-      cmdNoExist.setDescription()
+      //cmdNoExist.setDescription()
       cmdNoExist.setFooter(m.author.tag, m.author.displayAvatarURL({ dynamic: true }))
       cmdNoExist.setTimestamp()
       if(cmd == null) return m.channel.send(cmdNoExist)
+      const infoOnCommand = new MessageEmbed()
+      infoOnCommand.setThumbnail(c.user.displayAvatarURL())
+      infoOnCommand.setTitle(`${prefix}${a[0]} Command`)
+      infoOnCommand.setDescription(cmd.description)
+      infoOnCommand.addField(`Category`, cmd.category)
+      infoOnCommand.setFooter(m.author.tag, m.author.displayAvatarURL({ dynamic: true }))
+      infoOnCommand.setTimestamp()
+      return m.channel.send(infoOnCommand)
     }
 	},
 };
